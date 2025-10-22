@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>סריקת QR Code</title>
+    <script src="https://unpkg.com/@zxing/library@latest"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        #video {
+            width: 100%;
+            max-width: 400px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        #result {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid #007bff;
+        }
+        .file-input {
+            margin: 20px 0;
+        }
+        input[type="file"] {
+            padding: 10px;
+            border: 2px dashed #ddd;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>סריקת QR Code</h1>
+        
+        <div>
+            <button onclick="startCamera()">הפעל מצלמה</button>
+            <button onclick="stopCamera()">עצור מצלמה</button>
+        </div>
+        
+        <video id="video" autoplay></video>
+        
+        <div class="file-input">
+            <h3>או העלה תמונה של QR Code:</h3>
+            <input type="file" id="fileInput" accept="image/*" onchange="decodeFile()">
+        </div>
+        
+        <div id="result" style="display: none;">
+            <h3>תוצאת הסריקה:</h3>
+            <p id="qrText"></p>
+            <button onclick="copyToClipboard()">העתק לקליפבורד</button>
+        </div>
+        
+        <div style="margin-top: 30px;">
+            <h3>דוגמאות לקודי QR:</h3>
+            <p>GUEST_36_EVENT_4 - הצג 36</p>
+            <p>GUEST_38_EVENT_4 - הצג 38</p>
+            <p>GUEST_40_EVENT_4 - הצג 40</p>
+            <p>GUEST_41_EVENT_4 - הצג 41</p>
+        </div>
+    </div>
+
+    <script>
+        let codeReader;
+        let selectedDeviceId;
+
+        window.addEventListener('load', function () {
+            codeReader = new ZXing.BrowserMultiFormatReader();
+            console.log('ZXing code reader initialized');
+        });
+
+        function startCamera() {
+            codeReader.listVideoInputDevices()
+                .then((videoInputDevices) => {
+                    selectedDeviceId = videoInputDevices[0].deviceId;
+                    return codeReader.decodeFromVideoDevice(selectedDeviceId, 'video', (result, err) => {
+                        if (result) {
+                            console.log('QR Code detected:', result.text);
+                            document.getElementById('qrText').textContent = result.text;
+                            document.getElementById('result').style.display = 'block';
+                        }
+                        if (err && !(err instanceof ZXing.NotFoundException)) {
+                            console.error(err);
+                        }
+                    });
+                })
+                .catch((err) => {
+                    console.error(err);
+                    alert('שגיאה בהפעלת המצלמה: ' + err.message);
+                });
+        }
+
+        function stopCamera() {
+            if (codeReader) {
+                codeReader.reset();
+            }
+        }
+
+        function decodeFile() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        codeReader.decodeFromImage(img)
+                            .then((result) => {
+                                console.log('QR Code detected:', result.text);
+                                document.getElementById('qrText').textContent = result.text;
+                                document.getElementById('result').style.display = 'block';
+                            })
+                            .catch((err) => {
+                                console.error(err);
+                                alert('לא ניתן לקרוא QR Code מהתמונה');
+                            });
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function copyToClipboard() {
+            const text = document.getElementById('qrText').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                alert('הקוד הועתק לקליפבורד!');
+            }).catch(err => {
+                console.error('שגיאה בהעתקה:', err);
+            });
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,26 @@
+# Node
+node_modules/
+dist/
+build/
+npm-debug.log*
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite*
+
+# Logs and env
+*.log
+.env
+.env.*
+.history/
+
+# IDE / System
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

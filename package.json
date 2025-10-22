@@ -1,0 +1,21 @@
+{
+  "name": "qr-project",
+  "description": "",
+  "scripts": {
+    "start": "cd fronted/event-management-frontend && npm start",
+    "dev": "cd fronted/event-management-frontend && npm start",
+    "backend": "cd backend && python -m app.main",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "autoprefixer": "^10.4.21",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "framer-motion": "^12.23.13",
+    "lucide-react": "^0.544.0",
+    "postcss": "^8.5.6",
+    "qrcode": "^1.5.4",
+    "tailwind-merge": "^3.3.1",
+    "tailwindcss": "^4.1.13"
+  }
+}

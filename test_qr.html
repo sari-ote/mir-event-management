@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>קוד QR לבדיקה</title>
+    <script src="./fronted/event-management-frontend/node_modules/qrcode/build/qrcode.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .qr-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: inline-block;
+            margin: 20px;
+        }
+        .qr-code {
+            margin: 20px 0;
+        }
+        .info {
+            margin: 10px 0;
+            color: #666;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        input {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <h1>קוד QR לבדיקה</h1>
+    
+    <div class="qr-container">
+        <h3>קוד QR לדוגמה</h3>
+        <div id="qr-code" class="qr-code"></div>
+        <div class="info">
+            <p>זהו קוד QR לבדיקה של המערכת</p>
+            <p>תוכן הקוד: <span id="qr-content">GUEST_40_EVENT_4</span></p>
+        </div>
+    </div>
+
+    <div class="qr-container">
+        <h3>יצירת קוד QR מותאם</h3>
+        <input type="text" id="custom-text" placeholder="הכנס טקסט לקוד QR" value="GUEST_40_EVENT_4">
+        <br>
+        <button onclick="generateCustomQR()">צור קוד QR</button>
+        <div id="custom-qr-code" class="qr-code"></div>
+    </div>
+
+    <div class="qr-container">
+        <h3>קודי QR לבדיקות שונות</h3>
+        <button onclick="generateQR('GUEST_36_EVENT_4')">הצג 36</button>
+        <button onclick="generateQR('GUEST_38_EVENT_4')">הצג 38</button>
+        <button onclick="generateQR('GUEST_40_EVENT_4')">הצג 40</button>
+        <button onclick="generateQR('GUEST_41_EVENT_4')">הצג 41</button>
+        <div id="test-qr-code" class="qr-code"></div>
+    </div>
+
+    <script>
+        // Fallback אם QRCode לא נטען
+        if (typeof QRCode === 'undefined') {
+            console.log('QRCode library not loaded, trying alternative CDN...');
+            const script = document.createElement('script');
+            script.src = 'https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js';
+            script.onload = function() {
+                console.log('QRCode loaded from alternative CDN');
+                initializeQR();
+            };
+            script.onerror = function() {
+                console.error('Failed to load QRCode from both sources');
+                alert('שגיאה בטעינת ספריית QRCode. בדוק שהתקנת qrcode עם npm install');
+            };
+            document.head.appendChild(script);
+        } else {
+            console.log('QRCode loaded successfully from local frontend project');
+            initializeQR();
+        }
+        
+        function initializeQR() {
+            // יצירת קוד QR ראשוני
+            if (typeof QRCode !== 'undefined') {
+                QRCode.toCanvas(document.getElementById('qr-code'), 'GUEST_40_EVENT_4', {
+                    width: 200,
+                    margin: 2,
+                    color: {
+                        dark: '#000000',
+                        light: '#FFFFFF'
+                    }
+                });
+            }
+        }
+
+        function generateCustomQR() {
+            if (typeof QRCode === 'undefined') {
+                alert('ספריית QRCode לא נטענה. אנא רענן את הדף.');
+                return;
+            }
+            
+            const text = document.getElementById('custom-text').value;
+            if (text) {
+                QRCode.toCanvas(document.getElementById('custom-qr-code'), text, {
+                    width: 200,
+                    margin: 2,
+                    color: {
+                        dark: '#000000',
+                        light: '#FFFFFF'
+                    }
+                });
+            }
+        }
+
+        function generateQR(text) {
+            if (typeof QRCode === 'undefined') {
+                alert('ספריית QRCode לא נטענה. אנא רענן את הדף.');
+                return;
+            }
+            
+            QRCode.toCanvas(document.getElementById('test-qr-code'), text, {
+                width: 200,
+                margin: 2,
+                color: {
+                    dark: '#000000',
+                    light: '#FFFFFF'
+                }
+            });
+            document.getElementById('qr-content').textContent = text;
+        }
+    </script>
+</body>
+</html> 
