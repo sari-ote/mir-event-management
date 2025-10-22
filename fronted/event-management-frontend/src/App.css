@@ -1,0 +1,88 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+body {
+  background: #181818;
+  color: #fa9494;
+  min-height: 100vh;
+  margin: 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* עיצוב כפתורים ראשיים */
+.event-tabs-btn {
+  background: linear-gradient(90deg, #ff8c00, #ff0080);
+  color: #fff;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 24px;
+  margin: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s, background 0.3s;
+}
+
+.event-tabs-btn:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  background: linear-gradient(90deg, #ff0080, #ff8c00);
+}
+
+/* עיצוב עיגולי שולחנות */
+.table-circle {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: #232323;
+  color: #fff;
+  margin: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  border: 2px solid #ff8c00;
+  transition: box-shadow 0.2s, border 0.2s;
+}
+.table-circle:hover {
+  box-shadow: 0 6px 24px rgba(255,140,0,0.3);
+  border: 2px solid #ff0080;
+}
